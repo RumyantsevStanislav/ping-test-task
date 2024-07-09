@@ -1,10 +1,12 @@
 package ru.test.ping.services.impl;
 
+import jakarta.annotation.Nullable;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.test.ping.configuraions.TimerExecutorConfig;
 import ru.test.ping.entities.Execution;
 import ru.test.ping.entities.dtos.ExecutionDto;
 import ru.test.ping.entities.dtos.ExecutionResultDto;
@@ -13,12 +15,14 @@ import ru.test.ping.services.CommandExecutor;
 import ru.test.ping.services.ExecutionService;
 import ru.test.ping.utils.ExecutionsFilter;
 
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-import static ru.test.ping.entities.Execution.ExecutionState.COMPLETED;
-import static ru.test.ping.entities.Execution.ExecutionState.IN_PROGRESS;
+import static java.util.Objects.isNull;
+import static ru.test.ping.entities.Execution.ExecutionState.*;
 import static ru.test.ping.mappers.ExecutionMapper.EXECUTION_MAPPER;
 import static ru.test.ping.utils.Consts.DOMAIN_LIST_PAGE_SIZE;
 import static ru.test.ping.utils.Consts.RequestParams.PAGE_NUMBER;
@@ -37,6 +41,10 @@ public class ExecutionServiceImpl implements ExecutionService {
      * Исполнитель команды ping.
      */
     private final CommandExecutor commandExecutor;
+    /**
+     * Конфигурация бинов, участвующих в исполнении задач по-расписанию.
+     */
+    private final TimerExecutorConfig timerExecutorConfig;
 
     @Override
     public Page<ExecutionDto> findExecutions(Map<String, String> requestParams) {
@@ -57,13 +65,25 @@ public class ExecutionServiceImpl implements ExecutionService {
 
 
     @Override
-    public ExecutionDto executeCommand(@NonNull String address) {
-        Execution inProgressExecution = createExecution(address);
-        Execution savedExecution = executionRepository.save(inProgressExecution);
-        String result = commandExecutor.executeCommand(address);
-        savedExecution.setExecutionResult(result);
-        savedExecution.setExecutionState(COMPLETED);
-        return EXECUTION_MAPPER.toDto(executionRepository.save(savedExecution));
+    public void executeCommand(@NonNull String address, @Nullable OffsetDateTime startTime) {
+        Execution plannedExecution = executionRepository.save(createExecution(address));
+        timerExecutorConfig.getTimerInstance().schedule(
+                new TimerExecutor(executionRepository, commandExecutor, plannedExecution),
+                convertStartTime(startTime));
+    }
+
+    /**
+     * Преобразование времени старта исполнения команды в {@link Date}
+     *
+     * @param startTime время старта команды.
+     * @return {@link Date}
+     */
+    private Date convertStartTime(OffsetDateTime startTime) {
+        if (isNull(startTime)) {
+            return new Date();
+        } else {
+            return Date.from(startTime.toInstant());
+        }
     }
 
     /**
@@ -75,7 +95,7 @@ public class ExecutionServiceImpl implements ExecutionService {
         Execution execution = new Execution();
         execution.setAddress(address);
         execution.setExecutedAt(OffsetDateTime.now());
-        execution.setExecutionState(IN_PROGRESS);
+        execution.setExecutionState(PLANNED);
         return execution;
     }
 

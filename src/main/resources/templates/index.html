@@ -5,6 +5,13 @@
     <title>Ping</title>
 </head>
 <body>
+<nav>
+    <ul>
+        <li>
+        <a th:href="@{'/api/v1/executions'}">Листинг операций</a>
+        </li>
+    </ul>
+</nav>
 <div id="ip-or-execution-input">
     <form method="GET" th:action="@{/api/v1/executions/execute}">
         <input type="text" name="address" placeholder="ip or domain">

@@ -9,6 +9,7 @@ import ru.test.ping.entities.dtos.ExecutionDto;
 import ru.test.ping.entities.dtos.ExecutionResultDto;
 import ru.test.ping.services.ExecutionService;
 
+import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,14 +45,15 @@ public class ExecutionsController {
         return executionResult;
     }
 
-    @DeleteMapping ("/{id}")
+    @DeleteMapping("/{id}")
     public String deleteById(@PathVariable @NonNull UUID id, Model model) {
         executionService.deleteById(id);
         return "executions_page";
     }
 
     @GetMapping("execute")
-    public ExecutionDto ping(@RequestParam String address) {
-        return executionService.executeCommand(address);
+    public String ping(@RequestParam String address, @RequestParam(required = false) OffsetDateTime startTime) {
+        executionService.executeCommand(address, startTime);
+        return "executions_page";
     }
 }
