@@ -28,10 +28,38 @@ public class ExecutionServiceImpl implements ExecutionService {
      * Репозиторий для доступа к записям о доменах.
      */
     private final ExecutionRepository executionRepository;
+    /**
+     * Исполнитель команды ping.
+     */
+    private final CommandExecutor commandExecutor;
 
     @Override
     public Page<ExecutionDto> findExecutions(int pageNumber) {
         Page<Execution> domainPage = executionRepository.findAll(PageRequest.of(pageNumber, DOMAIN_LIST_PAGE_SIZE));
         return domainPage.map(EXECUTION_MAPPER::toDto);
     }
+
+    @Override
+    public ExecutionDto executeCommand(@NonNull String address) {
+        Execution inProgressExecution = createExecution(address);
+        Execution savedExecution = executionRepository.save(inProgressExecution);
+        String result = commandExecutor.executeCommand(address);
+        savedExecution.setExecutionResult(result);
+        savedExecution.setExecutionState(COMPLETED);
+        return EXECUTION_MAPPER.toDto(executionRepository.save(savedExecution));
+    }
+
+    /**
+     * Создание сущности о запуске команды ping.
+     *
+     * @return сущность о запуске команды ping.
+     */
+    private Execution createExecution(String address) {
+        Execution execution = new Execution();
+        execution.setAddress(address);
+        execution.setExecutedAt(OffsetDateTime.now());
+        execution.setExecutionState(IN_PROGRESS);
+        return execution;
+    }
+
 }

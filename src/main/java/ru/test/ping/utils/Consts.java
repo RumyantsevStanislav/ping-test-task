@@ -12,4 +12,12 @@ public class Consts {
      */
     public static int DOMAIN_LIST_PAGE_SIZE = 5;
 
+    public static final String NOT_EXECUTED = "Не выполнено";
+
+    /**
+     * Исполняемые команды.
+     */
+    public static class Commands {
+        public static String PING = "ping";
+    }
 }

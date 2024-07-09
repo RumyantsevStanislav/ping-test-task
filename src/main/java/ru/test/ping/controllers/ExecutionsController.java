@@ -32,4 +32,8 @@ public class ExecutionsController {
         return executionService.findExecutions(pageNumber);
     }
 
+    @GetMapping("execute")
+    public ExecutionDto ping(@RequestParam String address) {
+        return executionService.executeCommand(address);
+    }
 }

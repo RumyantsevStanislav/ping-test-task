@@ -17,4 +17,11 @@ public interface ExecutionService {
      */
     Page<ExecutionDto> findExecutions(int pageNumber);
 
+    /**
+     * Исполнение команды ping с сохранением результата.
+     *
+     * @param address адрес исполнения команды ping.
+     * @return {@link ExecutionDto}
+     */
+    ExecutionDto executeCommand(@NonNull String address);
 }
