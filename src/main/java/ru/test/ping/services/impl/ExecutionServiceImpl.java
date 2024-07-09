@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.test.ping.entities.Execution;
 import ru.test.ping.entities.dtos.ExecutionDto;
+import ru.test.ping.entities.dtos.ExecutionResultDto;
 import ru.test.ping.repositories.ExecutionRepository;
 import ru.test.ping.services.CommandExecutor;
 import ru.test.ping.services.ExecutionService;
@@ -14,6 +15,7 @@ import ru.test.ping.utils.ExecutionsFilter;
 
 import java.time.OffsetDateTime;
 import java.util.Map;
+import java.util.UUID;
 
 import static ru.test.ping.entities.Execution.ExecutionState.COMPLETED;
 import static ru.test.ping.entities.Execution.ExecutionState.IN_PROGRESS;
@@ -42,6 +44,12 @@ public class ExecutionServiceImpl implements ExecutionService {
         Page<Execution> domainPage = executionRepository.findAll(new ExecutionsFilter(requestParams).getExecutionSpecification(), PageRequest.of(pageNumber, DOMAIN_LIST_PAGE_SIZE));
         return domainPage.map(EXECUTION_MAPPER::toDto);
     }
+
+    @Override
+    public ExecutionResultDto findResultById(UUID id) {
+        return EXECUTION_MAPPER.toResultDto(executionRepository.findById(id).orElseThrow(() -> new RuntimeException("")));
+    }
+
 
     @Override
     public ExecutionDto executeCommand(@NonNull String address) {

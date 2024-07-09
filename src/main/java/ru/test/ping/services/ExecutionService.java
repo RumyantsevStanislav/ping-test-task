@@ -3,8 +3,10 @@ package ru.test.ping.services;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import ru.test.ping.entities.dtos.ExecutionDto;
+import ru.test.ping.entities.dtos.ExecutionResultDto;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Сервис для работы с сущностями домена.
@@ -18,6 +20,14 @@ public interface ExecutionService {
      * @return {@link Page< ExecutionDto >}
      */
     Page<ExecutionDto> findExecutions(Map<String, String> requestParams);
+
+    /**
+     * Получение {@link ExecutionResultDto} по id операции.
+     *
+     * @param id идентификатор записи.
+     * @return {@link ExecutionResultDto}
+     */
+    ExecutionResultDto findResultById(UUID id);
 
     /**
      * Исполнение команды ping с сохранением результата.

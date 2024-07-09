@@ -2,15 +2,15 @@ package ru.test.ping.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.lang.NonNull;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.test.ping.entities.dtos.ExecutionDto;
+import ru.test.ping.entities.dtos.ExecutionResultDto;
 import ru.test.ping.services.ExecutionService;
 
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Контроллер для работы с запусками команды ping.
@@ -35,6 +35,13 @@ public class ExecutionsController {
         Page<ExecutionDto> executions = executionService.findExecutions(requestParams);
         model.addAttribute("executions", executions);
         return executions;
+    }
+
+    @GetMapping("/{id}")
+    public ExecutionResultDto findResultById(@PathVariable @NonNull UUID id, Model model) {
+        ExecutionResultDto executionResult = executionService.findResultById(id);
+        model.addAttribute("executionResult", executionResult);
+        return executionResult;
     }
 
     @GetMapping("execute")

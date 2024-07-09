@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import ru.test.ping.entities.Execution;
 import ru.test.ping.entities.dtos.ExecutionDto;
+import ru.test.ping.entities.dtos.ExecutionResultDto;
 
 /**
  * Маппер сущности {@link Execution}
@@ -22,4 +23,12 @@ public interface ExecutionMapper {
      * @return DTO.
      */
     ExecutionDto toDto(Execution execution);
+
+    /**
+     * Маппинг сущности {@link Execution} на {@link ExecutionResultDto}
+     *
+     * @param execution источник данных.
+     * @return DTO.
+     */
+    ExecutionResultDto toResultDto(Execution execution);
 }
