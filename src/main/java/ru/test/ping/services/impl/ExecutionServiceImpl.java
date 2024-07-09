@@ -10,13 +10,16 @@ import ru.test.ping.entities.dtos.ExecutionDto;
 import ru.test.ping.repositories.ExecutionRepository;
 import ru.test.ping.services.CommandExecutor;
 import ru.test.ping.services.ExecutionService;
+import ru.test.ping.utils.ExecutionsFilter;
 
 import java.time.OffsetDateTime;
+import java.util.Map;
 
 import static ru.test.ping.entities.Execution.ExecutionState.COMPLETED;
 import static ru.test.ping.entities.Execution.ExecutionState.IN_PROGRESS;
 import static ru.test.ping.mappers.ExecutionMapper.EXECUTION_MAPPER;
 import static ru.test.ping.utils.Consts.DOMAIN_LIST_PAGE_SIZE;
+import static ru.test.ping.utils.Consts.RequestParams.PAGE_NUMBER;
 
 /**
  * Сервис для работы с сущностями домена.
@@ -34,8 +37,9 @@ public class ExecutionServiceImpl implements ExecutionService {
     private final CommandExecutor commandExecutor;
 
     @Override
-    public Page<ExecutionDto> findExecutions(int pageNumber) {
-        Page<Execution> domainPage = executionRepository.findAll(PageRequest.of(pageNumber, DOMAIN_LIST_PAGE_SIZE));
+    public Page<ExecutionDto> findExecutions(Map<String, String> requestParams) {
+        final int pageNumber = Integer.parseInt(requestParams.getOrDefault(PAGE_NUMBER, "0"));
+        Page<Execution> domainPage = executionRepository.findAll(new ExecutionsFilter(requestParams).getExecutionSpecification(), PageRequest.of(pageNumber, DOMAIN_LIST_PAGE_SIZE));
         return domainPage.map(EXECUTION_MAPPER::toDto);
     }
 

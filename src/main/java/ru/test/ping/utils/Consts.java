@@ -18,6 +18,14 @@ public class Consts {
      * Исполняемые команды.
      */
     public static class Commands {
-        public static String PING = "ping";
+        public static final String PING = "ping";
+    }
+
+    public static class RequestParams {
+        public static final String PAGE_NUMBER = "page_number";
+        public static final String ADDRESS = "address";
+        public static final String FROM = "from";
+        public static final String TO = "to";
+        public static final String STATE = "state";
     }
 }
