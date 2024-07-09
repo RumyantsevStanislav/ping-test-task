@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Ping</title>
+</head>
+<body>
+<div>
+    <form method="GET" th:action="@{'/api/v1/executions'}">
+        <div>
+            <label>address</label>
+            <label>state</label>
+            <label>executed at</label>
+        </div>
+        <button type="submit">Поиск</button>
+    </form>
+</div>
+<table>
+    <theat>
+        <tr>
+            <td>address</td>
+            <td>state</td>
+            <td>executed at</td>
+        </tr>
+    </theat>
+    <tbody>
+    <tr th:each="execution : ${executions.getContent()}">
+        <td th:text="${execution.address}"></td>
+    </tr>
+    </tbody>
+</table>
+<!--<nav>-->
+<!--    <ul class = "pagination">-->
+<!--        <li class ="page-item" th:classappend="$">-->
+<!--            -->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</nav>-->
+<div id="ip-or-execution-input">
+    <form method="GET" th:action="@{/api/v1/executions/execute}">
+        <input type="text" name="address" placeholder="ip or domain">
+        <button type="submit">Execute</button>
+    </form>
+</div>
+</body>
+</html>

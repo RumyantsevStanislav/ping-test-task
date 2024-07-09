@@ -30,6 +30,13 @@ public interface ExecutionService {
     ExecutionResultDto findResultById(UUID id);
 
     /**
+     * Удаление записи по id операции.
+     *
+     * @param id идентификатор записи.
+     */
+    void deleteById(UUID id);
+
+    /**
      * Исполнение команды ping с сохранением результата.
      *
      * @param address адрес исполнения команды ping.

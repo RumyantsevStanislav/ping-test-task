@@ -50,6 +50,11 @@ public class ExecutionServiceImpl implements ExecutionService {
         return EXECUTION_MAPPER.toResultDto(executionRepository.findById(id).orElseThrow(() -> new RuntimeException("")));
     }
 
+    @Override
+    public void deleteById(UUID id) {
+        executionRepository.deleteById(id);
+    }
+
 
     @Override
     public ExecutionDto executeCommand(@NonNull String address) {

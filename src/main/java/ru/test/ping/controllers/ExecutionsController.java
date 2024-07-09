@@ -44,6 +44,12 @@ public class ExecutionsController {
         return executionResult;
     }
 
+    @DeleteMapping ("/{id}")
+    public String deleteById(@PathVariable @NonNull UUID id, Model model) {
+        executionService.deleteById(id);
+        return "executions_page";
+    }
+
     @GetMapping("execute")
     public ExecutionDto ping(@RequestParam String address) {
         return executionService.executeCommand(address);
