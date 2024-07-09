@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ping</title>
+</head>
+<body>
+<div id="ip-or-execution-input">
+    <form method="GET" th:action="@{/api/v1/executions/execute}">
+        <input type="text" name="address" placeholder="ip or domain">
+        <button type="submit">Execute</button>
+    </form>
+</div>
+</body>
+</html>
