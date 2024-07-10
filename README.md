@@ -6,5 +6,4 @@
 - Местами разнести методы по разным классам, например CommandExecutorImpl.interpretResult и CommandExecutorImpl.executeCommand
 - TimerExecutor кривоват, успел только "заставить работать" 
 - UI - работает только выполнение команды.
-- docker-compose отсутствует
 - Тесты отсутствуют
