@@ -13,11 +13,14 @@ import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.UUID;
 
+import static ru.test.ping.utils.Consts.RequestPaths.EXECUTE;
+import static ru.test.ping.utils.Consts.RequestPaths.ROOT;
+
 /**
  * Контроллер для работы с запусками команды ping.
  */
 @RestController
-@RequestMapping("/api/v1/executions")
+@RequestMapping(ROOT)
 @RequiredArgsConstructor
 public class ExecutionsController {
     /**
@@ -51,7 +54,7 @@ public class ExecutionsController {
         return "executions_page";
     }
 
-    @GetMapping("execute")
+    @GetMapping(EXECUTE)
     public String ping(@RequestParam String address, @RequestParam(required = false) OffsetDateTime startTime) {
         executionService.executeCommand(address, startTime);
         return "executions_page";

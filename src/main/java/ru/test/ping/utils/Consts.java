@@ -28,4 +28,10 @@ public class Consts {
         public static final String TO = "to";
         public static final String STATE = "state";
     }
+
+    public static class RequestPaths {
+        public static final String ROOT = "/api/v1/executions";
+        public static final String EXECUTE = "/execute";
+    }
+
 }

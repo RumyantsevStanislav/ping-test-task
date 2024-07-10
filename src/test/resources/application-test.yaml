@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:15.2:///test_db
+  test:
+    database:
+      replace: none
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        # Instruct Spring to create the scheme at each test run:
+        ddl-auto: create
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        temp:
+          use_jdbc_metadata_defaults: false
+  jackson:
+    serialization:
+      indent_output: true
+  web:
+    resources:
+      static-locations: file:src/main/resources/static/
