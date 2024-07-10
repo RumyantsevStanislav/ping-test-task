@@ -21,7 +21,7 @@ public class CommandExecutorImpl implements CommandExecutor {
     @Override
     public String executeCommand(@NonNull String ipOrDomain) {
         try {
-            return interpretResult(Runtime.getRuntime().exec(String.format("%s %s", PING, ipOrDomain)));
+            return interpretResult(Runtime.getRuntime().exec(String.format("%s -c 5 %s", PING, ipOrDomain)));
         } catch (IOException ioException) {
             return NOT_EXECUTED;
         }
