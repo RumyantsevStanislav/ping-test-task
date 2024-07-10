@@ -21,5 +21,6 @@
 - Местами разнести методы по разным классам, например CommandExecutorImpl.interpretResult и
   CommandExecutorImpl.executeCommand
 - TimerExecutor кривоват, успел только "заставить работать"
-- UI - работает только выполнение команды.
 - Использование Future в асинхронных задачах.
+- UI - работает только выполнение команды. 
+Чтобы хоть как-то сгладить провал по UI - ссылка на мой пет-проект на Angular https://github.com/RumyantsevStanislav/book-find.ru/tree/develop/frontend
