@@ -14,6 +14,8 @@ public class Consts {
 
     public static final String NOT_EXECUTED = "Не выполнено";
 
+    public static final String MOSCOW_TIME_ZONE = "Europe/Moscow";
+
     /**
      * Исполняемые команды.
      */

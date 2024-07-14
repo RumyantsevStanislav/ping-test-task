@@ -8,9 +8,25 @@
 <div>
     <form method="GET" th:action="@{'/api/v1/executions'}">
         <div>
-            <label>address</label>
-            <label>state</label>
-            <label>executed at</label>
+            <label>address:</label>
+            <label>
+                <input type="text" name="address" placeholder="ip or domain">
+            </label>
+            <label>state:</label>
+            <label>
+                <select name="state">
+                    <option name="state" value="">ALL</option>
+                    <option name="state" th:each="state : ${states}" th:value="${state}" th:text="${state.name()}"/>
+                </select>
+            </label>
+            <label>executed from:</label>
+            <label>
+                <input type="datetime-local" name="from" placeholder="from">
+            </label>
+            <label>executed to:</label>
+            <label>
+                <input type="datetime-local" name="to" placeholder="to">
+            </label>
         </div>
         <button type="submit">Поиск</button>
     </form>
@@ -26,6 +42,8 @@
     <tbody>
     <tr th:each="execution : ${executions.getContent()}">
         <td th:text="${execution.address}"></td>
+        <td th:text="${execution.executionState}"></td>
+        <td th:text="${execution.executedAt}"></td>
     </tr>
     </tbody>
 </table>
@@ -38,7 +56,9 @@
 <!--</nav>-->
 <div id="ip-or-execution-input">
     <form method="GET" th:action="@{/api/v1/executions/execute}">
-        <input type="text" name="address" placeholder="ip or domain">
+        <label>
+            <input type="text" name="address" placeholder="ip or domain">
+        </label>
         <button type="submit">Execute</button>
     </form>
 </div>

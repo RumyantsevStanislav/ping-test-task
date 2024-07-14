@@ -6,9 +6,13 @@ import org.springframework.data.jpa.domain.Specification;
 import ru.test.ping.entities.Execution;
 import ru.test.ping.repositories.specifications.ExecutionSpecification;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
+import static ru.test.ping.utils.Consts.MOSCOW_TIME_ZONE;
 import static ru.test.ping.utils.Consts.RequestParams.*;
 
 /**
@@ -16,6 +20,8 @@ import static ru.test.ping.utils.Consts.RequestParams.*;
  */
 @Getter
 public class ExecutionsFilter {
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd'T'HH:mm");
     /**
      * Спецификация запроса.
      */
@@ -31,11 +37,11 @@ public class ExecutionsFilter {
             executionSpecification = executionSpecification.and(ExecutionSpecification.stateIs(state));
         }
         if (isParamExist(requestParams, FROM)) {
-            OffsetDateTime from = OffsetDateTime.parse(requestParams.get(FROM));
+            OffsetDateTime from = convertToOffsetDateTime(requestParams.get(FROM));
             executionSpecification = executionSpecification.and(ExecutionSpecification.executedAtGreaterOrEqualsThen(from));
         }
         if (isParamExist(requestParams, TO)) {
-            OffsetDateTime to = OffsetDateTime.parse(requestParams.get(TO));
+            OffsetDateTime to = convertToOffsetDateTime(requestParams.get(TO));
             executionSpecification = executionSpecification.and(ExecutionSpecification.executedAtLesserOrEqualsThen(to));
         }
     }
@@ -48,5 +54,10 @@ public class ExecutionsFilter {
      */
     private boolean isParamExist(@NonNull Map<String, String> requestParams, String paramName) {
         return requestParams.containsKey(paramName) && !requestParams.get(paramName).isEmpty();
+    }
+
+    private OffsetDateTime convertToOffsetDateTime(String stringLocalDateTime) {
+        LocalDateTime localDateTime = LocalDateTime.parse(stringLocalDateTime, formatter);
+        return OffsetDateTime.of(localDateTime, ZoneId.of(MOSCOW_TIME_ZONE).getRules().getOffset(localDateTime));
     }
 }
