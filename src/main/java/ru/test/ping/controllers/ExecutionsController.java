@@ -11,13 +11,8 @@ import ru.test.ping.entities.dtos.ExecutionDto;
 import ru.test.ping.entities.dtos.ExecutionResultDto;
 import ru.test.ping.services.ExecutionService;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 import static ru.test.ping.utils.Consts.RequestPaths.EXECUTE;
@@ -50,16 +45,16 @@ public class ExecutionsController {
     }
 
     @GetMapping("/{id}")
-    public ExecutionResultDto findResultById(@PathVariable @NonNull UUID id, Model model) {
+    public String findResultById(@PathVariable @NonNull UUID id, Model model) {
         ExecutionResultDto executionResult = executionService.findResultById(id);
         model.addAttribute("executionResult", executionResult);
-        return executionResult;
+        return "details_page";
     }
 
     @DeleteMapping("/{id}")
     public String deleteById(@PathVariable @NonNull UUID id) {
         executionService.deleteById(id);
-        return "executions_page";
+        return "redirect:/api/v1/executions";
     }
 
     @GetMapping(EXECUTE)

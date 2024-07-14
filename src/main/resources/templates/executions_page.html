@@ -37,6 +37,8 @@
             <td>address</td>
             <td>state</td>
             <td>executed at</td>
+            <td></td>
+            <td></td>
         </tr>
     </theat>
     <tbody>
@@ -44,6 +46,18 @@
         <td th:text="${execution.address}"></td>
         <td th:text="${execution.executionState}"></td>
         <td th:text="${execution.executedAt}"></td>
+        <td>
+            <form th:method="get" th:action="@{'/api/v1/executions/{id}'(id=${execution.id})}">
+                <input type="hidden"/>
+                <button type="submit">Подробнее</button>
+            </form>
+        </td>
+        <td>
+            <form th:method="delete" th:action="@{'/api/v1/executions/{id}'(id=${execution.id})}">
+                <input type="hidden"/>
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

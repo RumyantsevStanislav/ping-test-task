@@ -12,3 +12,7 @@ spring:
     password: ${POSTGRES_PASSWORD:}
   jpa:
     open-in-view: false
+  mvc:
+    hidden-method:
+      filter:
+        enabled: true
