@@ -9,6 +9,7 @@ public class PagesController {
     public String homepage() {
         return "index";
     }
+
     @GetMapping("/executions")
     public String executions() {
         return "executions_page";

@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static java.util.Objects.isNull;
-import static ru.test.ping.entities.Execution.ExecutionState.*;
+import static ru.test.ping.entities.Execution.ExecutionState.PLANNED;
 import static ru.test.ping.mappers.ExecutionMapper.EXECUTION_MAPPER;
 import static ru.test.ping.utils.Consts.DOMAIN_LIST_PAGE_SIZE;
 import static ru.test.ping.utils.Consts.RequestParams.PAGE_NUMBER;

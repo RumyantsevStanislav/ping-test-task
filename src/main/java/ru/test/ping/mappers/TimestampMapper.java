@@ -3,7 +3,8 @@ package ru.test.ping.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
-import java.time.*;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import static ru.test.ping.utils.Consts.MOSCOW_TIME_ZONE;
