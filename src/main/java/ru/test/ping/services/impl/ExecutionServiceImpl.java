@@ -15,7 +15,9 @@ import ru.test.ping.services.CommandExecutor;
 import ru.test.ping.services.ExecutionService;
 import ru.test.ping.utils.ExecutionsFilter;
 
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -24,6 +26,7 @@ import static java.util.Objects.isNull;
 import static ru.test.ping.entities.Execution.ExecutionState.PLANNED;
 import static ru.test.ping.mappers.ExecutionMapper.EXECUTION_MAPPER;
 import static ru.test.ping.utils.Consts.DOMAIN_LIST_PAGE_SIZE;
+import static ru.test.ping.utils.Consts.MOSCOW_TIME_ZONE;
 import static ru.test.ping.utils.Consts.RequestParams.PAGE_NUMBER;
 
 /**
@@ -64,11 +67,14 @@ public class ExecutionServiceImpl implements ExecutionService {
 
 
     @Override
-    public void executeCommand(@NonNull String address, @Nullable OffsetDateTime startTime) {
-        Execution plannedExecution = executionRepository.save(createExecution(address));
+    public void executeCommand(@NonNull String address, @Nullable LocalDateTime startTime) {
+        OffsetDateTime offsetStart = isNull(startTime)
+                ? OffsetDateTime.now()
+                : OffsetDateTime.of(startTime, ZoneId.of(MOSCOW_TIME_ZONE).getRules().getOffset(startTime));
+        Execution plannedExecution = executionRepository.save(createExecution(address, offsetStart));
         timerExecutorConfig.getTimerInstance().schedule(
                 new TimerExecutor(executionRepository, commandExecutor, plannedExecution),
-                convertStartTime(startTime));
+                convertStartTime(offsetStart));
     }
 
     /**
@@ -90,10 +96,10 @@ public class ExecutionServiceImpl implements ExecutionService {
      *
      * @return сущность о запуске команды ping.
      */
-    private Execution createExecution(String address) {
+    private Execution createExecution(String address, OffsetDateTime offsetStart) {
         Execution execution = new Execution();
         execution.setAddress(address);
-        execution.setExecutedAt(OffsetDateTime.now());
+        execution.setExecutedAt(offsetStart);
         execution.setExecutionState(PLANNED);
         return execution;
     }

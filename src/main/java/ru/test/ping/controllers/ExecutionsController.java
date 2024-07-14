@@ -11,7 +11,7 @@ import ru.test.ping.entities.dtos.ExecutionDto;
 import ru.test.ping.entities.dtos.ExecutionResultDto;
 import ru.test.ping.services.ExecutionService;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -58,7 +58,7 @@ public class ExecutionsController {
     }
 
     @GetMapping(EXECUTE)
-    public String ping(@RequestParam String address, @RequestParam(required = false) OffsetDateTime startTime) {
+    public String ping(@RequestParam String address, @RequestParam(required = false) LocalDateTime startTime) {
         executionService.executeCommand(address, startTime);
         return "redirect:/api/v1/executions";
     }

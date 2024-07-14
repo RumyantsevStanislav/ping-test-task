@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import ru.test.ping.entities.dtos.ExecutionDto;
 import ru.test.ping.entities.dtos.ExecutionResultDto;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.UUID;
 
@@ -43,5 +43,5 @@ public interface ExecutionService {
      *
      * @param address адрес исполнения команды ping.
      */
-    void executeCommand(@NonNull String address, @Nullable OffsetDateTime startTime);
+    void executeCommand(@NonNull String address, @Nullable LocalDateTime startTime);
 }
