@@ -10,6 +10,7 @@ import ru.test.ping.entities.Execution;
 import ru.test.ping.entities.dtos.ExecutionDto;
 import ru.test.ping.entities.dtos.ExecutionResultDto;
 import ru.test.ping.services.ExecutionService;
+import ru.test.ping.utils.ExecutionsFilter;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -39,8 +40,10 @@ public class ExecutionsController {
     @GetMapping
     public String findAll(@RequestParam Map<String, String> requestParams, Model model) {
         Page<ExecutionDto> executions = executionService.findExecutions(requestParams);
+        ExecutionsFilter executionsFilter = new ExecutionsFilter(requestParams);
         model.addAttribute("executions", executions);
         model.addAttribute("states", Execution.ExecutionState.values());
+        model.addAttribute("filterDef", executionsFilter.getFilterDefinition());
         return "executions_page";
     }
 

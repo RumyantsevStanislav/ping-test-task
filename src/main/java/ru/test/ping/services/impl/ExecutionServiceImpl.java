@@ -50,7 +50,7 @@ public class ExecutionServiceImpl implements ExecutionService {
 
     @Override
     public Page<ExecutionDto> findExecutions(Map<String, String> requestParams) {
-        final int pageNumber = Integer.parseInt(requestParams.getOrDefault(PAGE_NUMBER, "0"));
+        final int pageNumber = Integer.parseInt(requestParams.getOrDefault(PAGE_NUMBER, "1")) - 1;
         Page<Execution> domainPage = executionRepository.findAll(new ExecutionsFilter(requestParams).getExecutionSpecification(), PageRequest.of(pageNumber, DOMAIN_LIST_PAGE_SIZE));
         return domainPage.map(EXECUTION_MAPPER::toDto);
     }

@@ -26,23 +26,36 @@ public class ExecutionsFilter {
      * Спецификация запроса.
      */
     private Specification<Execution> executionSpecification;
+    /**
+     * Строка запроса с применяемым фильтром.
+     */
+    private StringBuilder filterDefinition;
 
     public ExecutionsFilter(@NonNull Map<String, String> requestParams) {
         this.executionSpecification = Specification.where(null);
+        this.filterDefinition = new StringBuilder();
         if (isParamExist(requestParams, ADDRESS)) {
-            executionSpecification = executionSpecification.and(ExecutionSpecification.addressLike(requestParams.get(ADDRESS)));
+            String queryParamValue = requestParams.get(ADDRESS);
+            executionSpecification = executionSpecification.and(ExecutionSpecification.addressLike(queryParamValue));
+            filterDefinition.append(appendQueryParam(ADDRESS, queryParamValue));
         }
         if (isParamExist(requestParams, STATE)) {
-            Execution.ExecutionState state = Execution.ExecutionState.valueOf(requestParams.get(STATE));
+            String queryParamValue = requestParams.get(STATE);
+            Execution.ExecutionState state = Execution.ExecutionState.valueOf(queryParamValue);
             executionSpecification = executionSpecification.and(ExecutionSpecification.stateIs(state));
+            filterDefinition.append(appendQueryParam(STATE, queryParamValue));
         }
         if (isParamExist(requestParams, FROM)) {
-            OffsetDateTime from = convertToOffsetDateTime(requestParams.get(FROM));
+            String queryParamValue = requestParams.get(FROM);
+            OffsetDateTime from = convertToOffsetDateTime(queryParamValue);
             executionSpecification = executionSpecification.and(ExecutionSpecification.executedAtGreaterOrEqualsThen(from));
+            filterDefinition.append(appendQueryParam(FROM, queryParamValue));
         }
         if (isParamExist(requestParams, TO)) {
-            OffsetDateTime to = convertToOffsetDateTime(requestParams.get(TO));
+            String queryParamValue = requestParams.get(TO);
+            OffsetDateTime to = convertToOffsetDateTime(queryParamValue);
             executionSpecification = executionSpecification.and(ExecutionSpecification.executedAtLesserOrEqualsThen(to));
+            filterDefinition.append(appendQueryParam(TO, queryParamValue));
         }
     }
 
@@ -59,5 +72,9 @@ public class ExecutionsFilter {
     private OffsetDateTime convertToOffsetDateTime(String stringLocalDateTime) {
         LocalDateTime localDateTime = LocalDateTime.parse(stringLocalDateTime, formatter);
         return OffsetDateTime.of(localDateTime, ZoneId.of(MOSCOW_TIME_ZONE).getRules().getOffset(localDateTime));
+    }
+
+    private String appendQueryParam(String queryParamName, String queryParamValue) {
+        return "&" + queryParamName + "=" + queryParamValue;
     }
 }
