@@ -22,5 +22,4 @@
   CommandExecutorImpl.executeCommand
 - TimerExecutor кривоват, успел только "заставить работать"
 - Использование Future в асинхронных задачах.
-- UI - работает только выполнение команды. 
-Чтобы хоть как-то сгладить провал по UI - ссылка на мой пет-проект на Angular https://github.com/RumyantsevStanislav/book-find.ru/tree/develop/frontend
+- Ссылка на мой пет-проект на Angular, там фронт реализован поинтереснее https://github.com/RumyantsevStanislav/book-find.ru/tree/develop/frontend
